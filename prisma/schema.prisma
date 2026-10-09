@@ -17,8 +17,49 @@ datasource db {
   provider = "postgresql"
 }
 
-// admin_svc has no owned tables in Fase-2-CompraLatino-Mermaid.md 4.3 yet:
-// "Configuración, reportes, métricas de negocio agregadas" (2.2) is
-// explicitly "pendiente de precisar" — the admin service currently reads
-// via REST/RabbitMQ from the other services rather than owning data.
-// Add models here once that schema is defined.
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+model ProcessedEvent {
+  eventId     String   @id @map("event_id") @db.Uuid
+  processedAt DateTime @default(now()) @map("processed_at")
+
+  @@map("processed_events")
+}
+
+model OrderSnapshot {
+  orderId     Int         @id @map("order_id")
+  userId      Int?        @map("user_id")
+  status      OrderStatus
+  statusAt    DateTime    @map("status_at")
+  totalAmount Decimal?    @map("total_amount") @db.Decimal(10, 2)
+  orderDate   DateTime?   @map("order_date")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([orderDate])
+  @@map("order_snapshots")
+}
+
+model RegisteredUser {
+  userId       Int      @id @map("user_id")
+  registeredAt DateTime @map("registered_at")
+
+  @@map("registered_users")
+}
+
+model ContentEntry {
+  id       Int    @id @default(autoincrement())
+  section  String
+  key      String
+  position Int
+  data     Json
+
+  @@unique([section, key])
+  @@index([section, position])
+  @@map("content_entries")
+}
