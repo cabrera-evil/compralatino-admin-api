@@ -4,3 +4,8 @@ export const OrderEventPattern = {
 	CREATED: 'order.created',
 	UPDATED: 'order.updated',
 } as const;
+
+// Published by users_svc, consumed by admin_svc (new-users KPI).
+export const UserEventPattern = {
+	REGISTERED: 'user.registered',
+} as const;
