@@ -37,6 +37,9 @@ export const EnvironmentSchema = Joi.object({
 		otherwise: Joi.optional(),
 	}),
 
+	USERS_RPC_TIMEOUT_MS: Joi.number().integer().min(100).default(5000),
+	PERMISSIONS_CACHE_TTL_MS: Joi.number().integer().min(0).default(30000),
+
 	CORS_ORIGIN: Joi.string().optional(),
 
 	JWT_SECRET: Joi.string().required(),
