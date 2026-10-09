@@ -6,20 +6,26 @@ import { AppService } from './app.service';
 import { ThrottlerGuard } from './guards/throttler.guard';
 import { EncryptionInterceptor } from './interceptors/encryption.interceptor';
 import { RpcEncryptionInterceptor } from './interceptors/rpc-encryption.interceptor';
+import { AuthModule } from './modules/auth/auth.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ContentModule } from './modules/content/content.module';
 import { EncryptionModule } from './modules/encryption/encryption.module';
 import { EventsModule } from './modules/events/events.module';
 import { HealthModule } from './modules/health/health.module';
+import { MonitoringModule } from './modules/monitoring/monitoring.module';
 import { PdfModule } from './modules/pdf/pdf.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
 	imports: [
 		AppConfig,
+		AuthModule,
 		CloudinaryModule,
+		ContentModule,
 		EncryptionModule,
 		EventsModule,
 		HealthModule,
+		MonitoringModule,
 		PdfModule,
 		PrismaModule,
 	],
