@@ -14,7 +14,11 @@ export const RisonQuery = createParamDecorator(
 				: {};
 			return opts.paginate
 				? { ...rest, ...getPagination(page as number, pageSize as number) }
-				: rest;
+				: {
+						...rest,
+						...(page !== undefined && { page }),
+						...(pageSize !== undefined && { pageSize }),
+					};
 		} catch {
 			return {};
 		}

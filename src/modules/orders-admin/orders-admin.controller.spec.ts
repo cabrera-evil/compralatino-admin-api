@@ -37,6 +37,12 @@ describe('OrdersAdminController', () => {
 		expect(orders.updateStatus).toHaveBeenCalledWith(1, 'confirmed');
 	});
 
+	it('passes page and pageSize from the rison query to the orders call', async () => {
+		const { controller, orders } = build();
+		await controller.list({ page: 2, pageSize: 5 });
+		expect(orders.list).toHaveBeenCalledWith({ page: 2, pageSize: 5 });
+	});
+
 	it('requires orders:read for reads and orders:write for PATCH', () => {
 		expect(permissionOf('list')).toBe(ORDERS_READ_PERMISSION);
 		expect(permissionOf('get')).toBe(ORDERS_READ_PERMISSION);
