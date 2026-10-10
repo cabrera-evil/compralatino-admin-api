@@ -191,7 +191,7 @@ export const seedContent = async (prisma: PrismaClient) => {
 			await prisma.contentEntry.upsert({
 				where: { section_key: { section, key } },
 				create: { section, key, position, data },
-				update: { position, data },
+				update: {},
 			});
 		}
 	}
