@@ -1,3 +1,29 @@
+## 1.0.0-beta.1 (2026-10-10)
+
+### Features
+
+* **auth:** add jwt strategy, jwt guard and current-user decorator ([72c7b70](https://github.com/cabrera-evil/compralatino-admin-api/commit/72c7b7000e8113e1bd65807ef26fef3cb3fa288f))
+* **content:** seed home and login content entries ([2130433](https://github.com/cabrera-evil/compralatino-admin-api/commit/213043363038c101d404d3932958ca0190b873ba))
+* **content:** serve public home and login content ([50ee038](https://github.com/cabrera-evil/compralatino-admin-api/commit/50ee038d8c43417294e5939a30846f89250264ae))
+* **events:** consume order and user events idempotently ([2cd1dda](https://github.com/cabrera-evil/compralatino-admin-api/commit/2cd1ddaead36d613aecfb6f241cbe20374872acf))
+* **health:** report database and rabbitmq status ([eec98bb](https://github.com/cabrera-evil/compralatino-admin-api/commit/eec98bb2dcd8e8c6f13e13ac11e80efceaf25201))
+* **monitoring:** serve event-fed kpis and recent orders to permitted admins ([96a175b](https://github.com/cabrera-evil/compralatino-admin-api/commit/96a175b5ca8270c3259472f30116cf9475ebb5b5))
+* **orders-admin:** proxy admin order list, detail and status update to orders-api over rabbitmq ([0046002](https://github.com/cabrera-evil/compralatino-admin-api/commit/0046002be37550e6dce382a8c5b3930327677278))
+* prisma schema baseline for admin_svc (no owned tables yet) ([7376c94](https://github.com/cabrera-evil/compralatino-admin-api/commit/7376c9444a3316261308f872d47c2694eb48c761))
+* **prisma:** add monitoring snapshot, processed event and content tables with migration ([99056bb](https://github.com/cabrera-evil/compralatino-admin-api/commit/99056bb44a5bb0510d8e590077382b0dfcea355d))
+* **rabbitmq:** add rabbitmq transport and order events ([3ad0610](https://github.com/cabrera-evil/compralatino-admin-api/commit/3ad06101fb1659f6d7eda54028d58dd7593a4d3a))
+* **users-client:** check permissions through users.permissions.get over rabbitmq ([893c2da](https://github.com/cabrera-evil/compralatino-admin-api/commit/893c2dae01f5284f62230e190417146759411eff))
+
+### Bug Fixes
+
+* **deps:** upgrade handlebars to 4.7.10 ([bef14e9](https://github.com/cabrera-evil/compralatino-admin-api/commit/bef14e985360b4cc009fcbf065a2c350e8eb2901))
+* **deps:** upgrade vulnerable dependencies and align nestjs packages ([e98e428](https://github.com/cabrera-evil/compralatino-admin-api/commit/e98e428e124353d7c3b5f6f4be9202e278c48435))
+* **docker:** migrate and seed on container start ([fd3b2e4](https://github.com/cabrera-evil/compralatino-admin-api/commit/fd3b2e41b8b0dc263eed22a16d92a21672b7a646))
+* **docker:** redeclare the pnpm version arg in the base stage ([5f1b1f7](https://github.com/cabrera-evil/compralatino-admin-api/commit/5f1b1f7c7c739a898096bd17d587f159f76ca464))
+* **health:** make disk threshold a percentage configurable via HEALTH_DISK_THRESHOLD_PERCENT ([8c9fe68](https://github.com/cabrera-evil/compralatino-admin-api/commit/8c9fe68427a9eaea6bef2c5561e173f7c8bd0ad5))
+* **orders-admin:** forward page and pageSize from the rison query ([0ecdffc](https://github.com/cabrera-evil/compralatino-admin-api/commit/0ecdffcc29147f1a4bfda0ab2405c46a4e376991))
+* **ws:** avoid logger name clash with the io adapter ([daf2100](https://github.com/cabrera-evil/compralatino-admin-api/commit/daf21002223f05cb2fa95e19bb9ee82009e962b7))
+
 ## [1.4.0](https://github.com/cabrera-evil/nestjs-template/compare/v1.3.1...v1.4.0) (2025-09-18)
 
 ### Features
