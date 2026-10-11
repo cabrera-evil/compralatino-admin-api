@@ -7,5 +7,6 @@ import { OrdersClientService } from './orders-client.service';
 	imports: [UsersClientModule],
 	controllers: [OrdersAdminController],
 	providers: [OrdersClientService],
+	exports: [OrdersClientService],
 })
 export class OrdersAdminModule {}

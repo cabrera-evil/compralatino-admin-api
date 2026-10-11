@@ -5,13 +5,20 @@ import {
 import { getPaginationMeta } from '@/utils/prisma.utils';
 import { Injectable } from '@nestjs/common';
 import { OrderStatus, Prisma, PrismaClient } from 'prisma/generated/client';
+import { parseDateRange } from './date-range';
 import {
 	MonitoringKpis,
 	serializeKpis,
 	serializeRecentOrder,
 } from './monitoring.serializer';
 
-export type MonitoringQuery = { take?: number; skip?: number };
+export type MonitoringQuery = {
+	take?: number;
+	skip?: number;
+	/** Inclusive YYYY-MM-DD days (America/El_Salvador); both or neither. */
+	from?: string;
+	to?: string;
+};
 
 // Cancelled and failed orders are not sales.
 const NON_SALE_STATUSES: OrderStatus[] = [
@@ -23,7 +30,11 @@ const NON_SALE_STATUSES: OrderStatus[] = [
 export class MonitoringService {
 	constructor(private readonly prisma: PrismaClient) {}
 
-	async getSnapshot({ take, skip }: MonitoringQuery) {
+	async getSnapshot({ take, skip, from, to }: MonitoringQuery) {
+		const range = parseDateRange({ from, to });
+		const inRange: Prisma.OrderSnapshotWhereInput | undefined = range && {
+			orderDate: range,
+		};
 		const page = {
 			take: Math.min(
 				take ?? DEFAULT_RECENT_ORDERS_PAGE_SIZE,
@@ -32,18 +43,22 @@ export class MonitoringService {
 			skip: skip ?? 0,
 		};
 		const [orderCount, sales, byStatus, newUsers, recent] = await Promise.all([
-			this.prisma.orderSnapshot.count(),
+			this.prisma.orderSnapshot.count({ where: inRange }),
 			this.prisma.orderSnapshot.aggregate({
 				_sum: { totalAmount: true },
-				where: { status: { notIn: NON_SALE_STATUSES } },
+				where: { ...inRange, status: { notIn: NON_SALE_STATUSES } },
 			}),
 			this.prisma.orderSnapshot.groupBy({
 				by: ['status'],
+				where: inRange,
 				_count: { _all: true },
 			}),
-			this.prisma.registeredUser.count(),
+			this.prisma.registeredUser.count({
+				where: range && { registeredAt: range },
+			}),
 			this.prisma.orderSnapshot.findMany({
 				...page,
+				where: inRange,
 				orderBy: [
 					{ orderDate: { sort: 'desc', nulls: 'last' } },
 					{ orderId: 'desc' },

@@ -66,4 +66,43 @@ describe('MonitoringService', () => {
 		expect(args.take).toBeLessThan(100000);
 		expect(args.skip).toBe(5);
 	});
+
+	it('without a range queries all-time (no where on counts)', async () => {
+		const { prisma, service } = build();
+		await service.getSnapshot({});
+		expect(prisma.orderSnapshot.count).toHaveBeenCalledWith({
+			where: undefined,
+		});
+		expect(prisma.registeredUser.count).toHaveBeenCalledWith({
+			where: undefined,
+		});
+	});
+
+	it('scopes KPIs, new users and recent orders to the range', async () => {
+		const { prisma, service } = build();
+		await service.getSnapshot({ from: '2026-01-01', to: '2026-01-31' });
+		const orderDate = {
+			gte: new Date('2026-01-01T06:00:00.000Z'),
+			lte: new Date('2026-02-01T05:59:59.999Z'),
+		};
+		expect(prisma.orderSnapshot.count).toHaveBeenCalledWith({
+			where: { orderDate },
+		});
+		expect(prisma.orderSnapshot.aggregate).toHaveBeenCalledWith({
+			_sum: { totalAmount: true },
+			where: {
+				orderDate,
+				status: { notIn: [OrderStatus.CANCELLED, OrderStatus.FAILED] },
+			},
+		});
+		expect(prisma.orderSnapshot.groupBy).toHaveBeenCalledWith(
+			expect.objectContaining({ where: { orderDate } })
+		);
+		expect(prisma.registeredUser.count).toHaveBeenCalledWith({
+			where: { registeredAt: orderDate },
+		});
+		expect(prisma.orderSnapshot.findMany.mock.calls[0][0].where).toEqual({
+			orderDate,
+		});
+	});
 });

@@ -20,3 +20,7 @@ export const ORDER_TARGET_STATUSES = [
 
 export const DEFAULT_ORDERS_RPC_TIMEOUT_MS = 5000;
 export const MAX_ORDERS_PAGE_SIZE = 50;
+export const ORDERS_ADMIN_ANALYTICS_PATTERN = 'orders.admin.analytics';
+// Served by recommendations-api over the same exchange.
+export const RECOMMENDATIONS_PURCHASE_MATCH_PATTERN =
+	'recommendations.admin.purchaseMatch';

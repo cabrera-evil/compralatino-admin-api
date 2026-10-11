@@ -1,8 +1,10 @@
 import {
 	DEFAULT_ORDERS_RPC_TIMEOUT_MS,
+	ORDERS_ADMIN_ANALYTICS_PATTERN,
 	ORDERS_ADMIN_GET_PATTERN,
 	ORDERS_ADMIN_LIST_PATTERN,
 	ORDERS_ADMIN_UPDATE_STATUS_PATTERN,
+	RECOMMENDATIONS_PURCHASE_MATCH_PATTERN,
 } from '@/constants/orders-rpc';
 import { RABBITMQ_SERVICE } from '@/constants/rabbitmq';
 import {
@@ -33,6 +35,29 @@ export type AdminOrdersListReply = {
 	pageSize: number;
 };
 
+export type OrdersAnalyticsReply = {
+	funnel: {
+		placed: number;
+		confirmed: number;
+		paid: number;
+		delivered: number;
+	};
+	topProducts: Record<'byUnits' | 'byRevenue', TopProduct[]>;
+	matchSample: { orderId: number; userId: number; productCodes: string[] }[];
+};
+// revenue is a decimal string (orders-api keeps money in Decimal).
+export type TopProduct = {
+	productCode: string;
+	title: string;
+	units: number;
+	revenue: string;
+};
+export type PurchaseMatchReply = {
+	sampledOrders: number;
+	matchedOrders: number;
+	rate: number;
+};
+
 const DOMAIN_ERRORS: Record<number, new (message: string) => HttpException> = {
 	400: BadRequestException,
 	404: NotFoundException,
@@ -52,6 +77,22 @@ export class OrdersClientService {
 
 	list(query: AdminOrdersListRequest) {
 		return this.request<AdminOrdersListReply>(ORDERS_ADMIN_LIST_PATTERN, query);
+	}
+
+	/** `from`/`to` are ISO instants (inclusive). */
+	analytics(range: { from: string; to: string }) {
+		return this.request<OrdersAnalyticsReply>(
+			ORDERS_ADMIN_ANALYTICS_PATTERN,
+			range
+		);
+	}
+
+	/** Answered by recommendations-api; shares the request/reply plumbing. */
+	purchaseMatch(orders: OrdersAnalyticsReply['matchSample']) {
+		return this.request<PurchaseMatchReply>(
+			RECOMMENDATIONS_PURCHASE_MATCH_PATTERN,
+			{ orders }
+		);
 	}
 
 	get(id: number) {
