@@ -1,3 +1,9 @@
+## [1.0.0-beta.2](https://github.com/cabrera-evil/compralatino-admin-api/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2026-10-11)
+
+### Features
+
+* **monitoring:** add date range and BI analytics endpoint ([8b99ae5](https://github.com/cabrera-evil/compralatino-admin-api/commit/8b99ae5f482c4e7eb56d7ba432e5b1e88250436c))
+
 ## 1.0.0-beta.1 (2026-10-10)
 
 ### Features
