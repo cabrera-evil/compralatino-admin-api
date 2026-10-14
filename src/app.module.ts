@@ -13,6 +13,7 @@ import { EncryptionModule } from './modules/encryption/encryption.module';
 import { EventsModule } from './modules/events/events.module';
 import { HealthModule } from './modules/health/health.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { OrdersAdminModule } from './modules/orders-admin/orders-admin.module';
 import { PdfModule } from './modules/pdf/pdf.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 
@@ -26,6 +27,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 		EventsModule,
 		HealthModule,
 		MonitoringModule,
+		OrdersAdminModule,
 		PdfModule,
 		PrismaModule,
 	],
